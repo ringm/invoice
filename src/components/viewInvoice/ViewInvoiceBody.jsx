@@ -76,54 +76,43 @@ const Data = styled.p`
 `;
 
 export default function ViewInvoiceBody({ invoice }) {
-  const {
-    id,
-    description,
-    senderAddress,
-    createdAt,
-    paymentDue,
-    clientName,
-    clientAddress,
-    clientEmail,
-    items
-  } = invoice;
   return (
     <Container>
       <Col>
-        <Data id>{id}</Data>
-        <Data>{description}</Data>
+        <Data id>{invoice.id}</Data>
+        <Data>{invoice.description}</Data>
       </Col>
       <Col>
-        <Data>{senderAddress.street}</Data>
-        <Data>{senderAddress.city}</Data>
-        <Data>{senderAddress.postCode}</Data>
-        <Data>{senderAddress.country}</Data>
+        <Data>{invoice.senderAddress.street}</Data>
+        <Data>{invoice.senderAddress.city}</Data>
+        <Data>{invoice.senderAddress.postCode}</Data>
+        <Data>{invoice.senderAddress.country}</Data>
       </Col>
       <Col flexCol>
         <div>
           <Data>Invoice Date</Data>
-          <Data highlight>{formatDate(createdAt)}</Data>
+          <Data highlight>{formatDate(invoice.createdAt)}</Data>
         </div>
         <div>
           <Data>Payment Due</Data>
-          <Data highlight>{formatDate(paymentDue)}</Data>
+          <Data highlight>{formatDate(invoice.paymentDue)}</Data>
         </div>
       </Col>
       <Col right>
         <Data>Bill To</Data>
-        <Data highlight>{clientName}</Data>
-        <Data>{clientAddress.street}</Data>
-        <Data>{clientAddress.city}</Data>
-        <Data>{clientAddress.postCode}</Data>
-        <Data>{clientAddress.country}</Data>
+        <Data highlight>{invoice.clientName}</Data>
+        <Data>{invoice.clientAddress.street}</Data>
+        <Data>{invoice.clientAddress.city}</Data>
+        <Data>{invoice.clientAddress.postCode}</Data>
+        <Data>{invoice.clientAddress.country}</Data>
       </Col>
       <Col stretch>
         <Data>Sent to</Data>
         <Data highlight lowercase>
-          {clientEmail}
+          {invoice.clientEmail}
         </Data>
       </Col>
-      <ViewInvoiceItemList items={items} />
+      <ViewInvoiceItemList items={invoice.items} />
     </Container>
   );
 }

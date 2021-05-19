@@ -10,7 +10,7 @@ import ViewInvoice from "./components/viewInvoice/ViewInvoice";
 function App() {
   const [theme, setTheme] = useState("dark");
   const [invoices, setInvoices] = useState(invoiceData);
-  const [selectedInvoice, setSelectedInvoice] = useState({});
+  const [selectedInvoice, setSelectedInvoice] = useState(invoiceData[0]);
 
   function handleThemeToggle() {
     theme === "light" ? setTheme("dark") : setTheme("light");
@@ -34,7 +34,7 @@ function App() {
           render={() => (
             <Invoices
               invoices={invoices}
-              onInvoiceSelect={handleInvoiceSelect}
+              handleInvoiceSelect={handleInvoiceSelect}
             />
           )}
         />

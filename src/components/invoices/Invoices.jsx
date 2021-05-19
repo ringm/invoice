@@ -13,7 +13,7 @@ const Container = styled.div`
   margin-bottom: 60px;
 `;
 
-export default function Invoices({ invoices, onInvoiceSelect }) {
+export default function Invoices({ invoices, handleInvoiceSelect }) {
   return (
     <Container>
       <InvoiceHeader count={invoices.length} />
@@ -25,7 +25,7 @@ export default function Invoices({ invoices, onInvoiceSelect }) {
             <Invoice
               key={invoice.id}
               invoice={invoice}
-              onInvoiceSelect={onInvoiceSelect}
+              onInvoiceSelect={handleInvoiceSelect}
             />
           ))}
         </InvoiceList>

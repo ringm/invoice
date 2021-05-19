@@ -1,160 +1,129 @@
-import styled from 'styled-components';
-import { formatDate } from '../../helpers';
-import ViewInvoiceItemList from './ViewInvoiceItemList'
+import styled, { css } from "styled-components";
+import { formatDate } from "../../helpers";
+import ViewInvoiceItemList from "./ViewInvoiceItemList";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr auto 1fr;  
+  grid-template-columns: 1fr 1fr;
   grid-row-gap: 30px;
   padding: 30px 20px;
   width: min(90%, 730px);
-  background-color: ${props => props.theme.invoiceBg};
+  background-color: ${(props) => props.theme.invoiceBg};
   border-radius: 8px;
-  transition: background-color .2s;
-`
+  transition: background-color 0.2s;
+`;
 
-const IdContainer = styled.div`
+const Col = styled.div`
   grid-column: 1 / 2;
-`
 
-const InvoiceId = styled.p`
-  font-weight: 700;
-  font-size: 12px;
-  color: ${props => props.theme.fontPriColor};
-  margin-bottom: 8px;
-  transition: color .2s;
+  ${(props) =>
+    props.right &&
+    css`
+      grid-column: 2 / 3;
+    `}
 
-  &::before {
-    content: '#';
-    color: #7E88C3;
-  }
-`
+  ${(props) =>
+    props.stretch &&
+    css`
+      grid-column: 1 / 3;
+    `}
 
-const InvoiceDesc = styled.p`
+  ${(props) =>
+    props.flexCol &&
+    css`
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    `}
+`;
+
+const Data = styled.p`
   font-size: 12px;
   font-weight: 500;
   text-transform: capitalize;
-  color: ${props => props.theme.fontSecColor};
-  transition: color .2s;
-`
+  color: ${(props) => props.theme.fontSecColor};
+  transition: color 0.2s;
 
-const AddressContainer = styled.div`
-  grid-column: 1 / 2;
-`
-
-const AddressTxt = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-  color: ${props => props.theme.fontSecColor};
-  transition: color .2s;
-
-  &+& {
+  & + & {
     margin-top: 8px;
   }
-`
 
-const InvoiceDateContainer = styled.div`
-  grid-column: 1 / 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`
+  ${(props) =>
+    props.highlight &&
+    css`
+      font-size: 15px;
+      font-weight: 700;
+      color: ${(props) => props.theme.fontPriColor};
+    `}
 
-const InvoiceDateTitle = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-  color: ${props => props.theme.fontSecColor};
-  margin-bottom: 12px;
-  transition: color .2s;
-`
+  ${(props) =>
+    props.lowercase &&
+    css`
+      text-transform: lowercase;
+    `}
 
-const InvoiceDate = styled.p`
-  font-size: 15px;
-  font-weight: 700;
-  text-transform: capitalize;
-  color: ${props => props.theme.fontPriColor};
-  transition: color .2s;
-`
-
-const BillToContainer = styled.div`
-  grid-column: 3 / 4;
-`
-
-const BillToTitle = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-  color: ${props => props.theme.fontSecColor};
-  margin-bottom: 12px;
-  transition: color .2s;
-`
-
-const BillToName = styled.p`
-  font-size: 15px;
-  font-weight: 700;
-  text-transform: capitalize;
-  color: ${props => props.theme.fontPriColor};
-  margin-bottom: 14px;
-  transition: color .2s;
-` 
-
-const EmailContainer = styled.div`
-  grid-column: 1 / 6;
-`
-const EmailTitle = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-  color: ${props => props.theme.fontSecColor};
-  margin-bottom: 12px;
-  transition: color .2s;
-`
-
-const Email = styled.p`
-  font-size: 15px;
-  font-weight: 700;
-  color: ${props => props.theme.fontPriColor};
-  transition: color .2s;
-`
+    ${(props) =>
+      props.id &&
+      css`
+        color: ${(props) => props.theme.fontPriColor};
+        font-weight: bold;
+        text-transform: uppercase;
+        &::before {
+          content: "#";
+          color: #7e88c3;
+        }
+      `}
+`;
 
 export default function ViewInvoiceBody({ invoice }) {
+  const {
+    id,
+    description,
+    senderAddress,
+    createdAt,
+    paymentDue,
+    clientName,
+    clientAddress,
+    clientEmail,
+    items
+  } = invoice;
   return (
     <Container>
-      <IdContainer>
-        <InvoiceId>{invoice.id}</InvoiceId>
-        <InvoiceDesc>{invoice.description}</InvoiceDesc>
-      </IdContainer>
-      <AddressContainer>
-        <AddressTxt>{invoice.senderAddress.street}</AddressTxt>
-        <AddressTxt>{invoice.senderAddress.city}</AddressTxt>
-        <AddressTxt>{invoice.senderAddress.postCode}</AddressTxt>
-        <AddressTxt>{invoice.senderAddress.country}</AddressTxt>
-      </AddressContainer>
-      <InvoiceDateContainer>
+      <Col>
+        <Data id>{id}</Data>
+        <Data>{description}</Data>
+      </Col>
+      <Col>
+        <Data>{senderAddress.street}</Data>
+        <Data>{senderAddress.city}</Data>
+        <Data>{senderAddress.postCode}</Data>
+        <Data>{senderAddress.country}</Data>
+      </Col>
+      <Col flexCol>
         <div>
-          <InvoiceDateTitle>Invoice Date</InvoiceDateTitle>
-          <InvoiceDate>{formatDate(invoice.createdAt)}</InvoiceDate>
+          <Data>Invoice Date</Data>
+          <Data highlight>{formatDate(createdAt)}</Data>
         </div>
         <div>
-          <InvoiceDateTitle>Payment Due</InvoiceDateTitle>
-          <InvoiceDate>{formatDate(invoice.paymentDue)}</InvoiceDate>
+          <Data>Payment Due</Data>
+          <Data highlight>{formatDate(paymentDue)}</Data>
         </div>
-      </InvoiceDateContainer>
-      <BillToContainer>
-        <BillToTitle>Bill To</BillToTitle>
-        <BillToName>{invoice.clientName}</BillToName>
-        <AddressTxt>{invoice.clientAddress.street}</AddressTxt>
-        <AddressTxt>{invoice.clientAddress.city}</AddressTxt>
-        <AddressTxt>{invoice.clientAddress.postCode}</AddressTxt>
-        <AddressTxt>{invoice.clientAddress.country}</AddressTxt>
-      </BillToContainer>
-      <EmailContainer>
-        <EmailTitle>Sent to</EmailTitle>
-        <Email>{invoice.clientEmail}</Email>
-      </EmailContainer>
-      <ViewInvoiceItemList items={invoice.items} />
+      </Col>
+      <Col right>
+        <Data>Bill To</Data>
+        <Data highlight>{clientName}</Data>
+        <Data>{clientAddress.street}</Data>
+        <Data>{clientAddress.city}</Data>
+        <Data>{clientAddress.postCode}</Data>
+        <Data>{clientAddress.country}</Data>
+      </Col>
+      <Col stretch>
+        <Data>Sent to</Data>
+        <Data highlight lowercase>
+          {clientEmail}
+        </Data>
+      </Col>
+      <ViewInvoiceItemList items={items} />
     </Container>
   );
 }

@@ -1,45 +1,45 @@
-import React, { useState } from 'react';
-import { ThemeProvider } from 'styled-components';
-import {lightTheme, darkTheme, GlobalStyles} from './theme';
-import { invoiceData } from './data';
-import NavBar from './components/NavBar';
-import Invoices from './components/invoices/Invoices';
-import InvoiceHeader from './components/invoices/InvoiceHeader';
-import InvoiceList from './components/invoices/InvoiceList';
-import Invoice from './components/invoices/Invoice';
-import NoInvoices from './components/invoices/NoInvoices';
-import ViewInvoice from './components/viewInvoice/ViewInvoice';
-import ViewInvoiceNav from './components/viewInvoice/ViewInvoiceNav';
-import ViewInvoiceHeader from './components/viewInvoice/ViewInvoiceHeader';
-import ViewInvoiceBody from './components/viewInvoice/ViewInvoiceBody';
+import React, { useState } from "react";
+import { Switch, Route } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme, GlobalStyles } from "./theme";
+import { invoiceData } from "./data";
+import NavBar from "./components/NavBar";
+import Invoices from "./components/invoices/Invoices";
+import ViewInvoice from "./components/viewInvoice/ViewInvoice";
 
-function App() { 
-
-  const [theme, setTheme] = useState('dark');
+function App() {
+  const [theme, setTheme] = useState("dark");
   const [invoices, setInvoices] = useState(invoiceData);
-  const [selectedInvoice, setSelectedInvoice] = useState(invoiceData[3])
+  const [selectedInvoice, setSelectedInvoice] = useState({});
 
   function handleThemeToggle() {
-    theme === 'light' ? setTheme('dark') : setTheme('light'); 
+    theme === "light" ? setTheme("dark") : setTheme("light");
+  }
+
+  function handleInvoiceSelect(invoice) {
+    setSelectedInvoice(invoice);
   }
 
   return (
-    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
       <GlobalStyles />
       <NavBar onThemeToggle={handleThemeToggle} />
-      {/*<Invoices>
-        <InvoiceHeader count={invoices.length} />
-        {invoices.length === 0 ? <NoInvoices /> : 
-          <InvoiceList>
-            {invoices.map(invoice => <Invoice key={invoice.id} invoice={invoice} />)}
-          </InvoiceList>
-        }
-      </Invoices>*/}
-      <ViewInvoice>
-        <ViewInvoiceNav />
-        <ViewInvoiceHeader invoice={selectedInvoice} />
-        <ViewInvoiceBody invoice={selectedInvoice} />
-      </ViewInvoice>
+      <Switch>
+        <Route
+          path="/invoices/:id"
+          render={() => <ViewInvoice invoice={selectedInvoice} />}
+        />
+        <Route
+          path="/invoices"
+          render={() => (
+            <Invoices
+              invoices={invoices}
+              onInvoiceSelect={handleInvoiceSelect}
+            />
+          )}
+        />
+        <Route path="/" exact render={() => <Invoices invoices={invoices} />} />
+      </Switch>
     </ThemeProvider>
   );
 }

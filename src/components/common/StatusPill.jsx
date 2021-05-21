@@ -2,10 +2,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const StatusContainer = styled.div`
-  grid-column: 3 / 4;
-  grid-row: 3 / 5;
   width: 105px;
-  justify-self: end;
+  height: 40px;
   background-color: ${(props) =>
     props.theme.themeName === "light"
       ? "rgba(55, 59, 83, 0.06)"
@@ -16,12 +14,7 @@ const StatusContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (min-width: 768px) {
-    grid-column: 5 / 6;
-    grid-row: 1 / 2;
-    justify-self: end;
-  }
+  box-sizing: border-box;
 
   ${(props) =>
     props.status === "pending" &&

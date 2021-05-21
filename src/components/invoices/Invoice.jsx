@@ -9,13 +9,16 @@ const Container = styled.div`
   border-radius: 8px;
   padding: 25px;
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
-  grid-template-rows: auto 30px auto auto;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "id clientName" ". ." "paymentDue statusPill" "totalDue statusPill";
+  align-items: center;
   transition: background-color 0.2s;
 
   @media (min-width: 768px) {
     justify-content: space-between;
     grid-template-columns: 75px 120px 130px minmax(100px, max-content) 105px 5px;
+    grid-template-areas: "id paymentDue clientName totalDue statusPill link";
     grid-template-rows: auto;
     align-items: center;
     justify-items: start;
@@ -23,8 +26,6 @@ const Container = styled.div`
 `;
 
 const Id = styled.p`
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
   color: ${(props) => props.theme.fontPriColor};
   font-weight: 700;
   font-size: 12px;
@@ -43,40 +44,25 @@ const Id = styled.p`
 `;
 
 const PaymentDue = styled.p`
-  grid-column: 1 / 2;
-  grid-row: 3 / 4;
   color: ${(props) => props.theme.fontSecColor};
   font-size: 12px;
   font-weight: 500;
-  margin-bottom: 10px;
   transition: color 0.2s;
 
   @media (min-width: 768px) {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
     justify-self: start;
     margin-bottom: 0;
   }
 `;
 
 const ClientName = styled.p`
-  grid-column: 3 / 4;
-  grid-row: 1 / 2;
-  justify-self: end;
   color: ${(props) => props.theme.fontSecColor};
   font-size: 12px;
   font-weight: 500;
   transition: color 0.2s;
-
-  @media (min-width: 768px) {
-    grid-column: 3 / 4;
-    justify-self: start;
-  }
 `;
 
 const Total = styled.p`
-  grid-column: 1 / 2;
-  grid-row: 4 / 5;
   color: ${(props) => props.theme.fontPriColor};
   font-size: 16px;
   font-weight: 700;
@@ -84,12 +70,6 @@ const Total = styled.p`
 
   &::before {
     content: "£ ";
-  }
-
-  @media (min-width: 768px) {
-    grid-column: 4 / 5;
-    grid-row: 1 / 2;
-    justify-self: end;
   }
 `;
 
@@ -99,11 +79,21 @@ const Arrow = styled.svg`
   display: none;
 
   @media (min-width: 768px) {
-    grid-column: 6 / 7;
-    grid-row: 1 / 2;
     display: inline-block;
     justify-self: center;
     cursor: pointer;
+  }
+`;
+
+const Col = styled.div`
+  grid-area: ${(props) => props.area};
+  justify-self: ${(props) =>
+    props.area === "clientName" || props.area === "statusPill"
+      ? "end"
+      : "start"};
+
+  @media (min-width: 768px) {
+    justify-self: ${(props) => (props.area === "totalDue" ? "end" : "start")};
   }
 `;
 
@@ -114,25 +104,43 @@ export default function Invoice({ invoice, onInvoiceSelect }) {
 
   return (
     <Container>
-      <Id>{invoice.id}</Id>
-      <PaymentDue>Due {formatDate(invoice.paymentDue)}</PaymentDue>
-      <ClientName>{invoice.clientName}</ClientName>
-      <Total>{formatMoney(total)}</Total>
-      <StatusPill status={invoice.status} />
-      <Link
-        to={`/invoices/${invoice.id}`}
-        onClick={() => onInvoiceSelect(invoice)}
-      >
-        <Arrow xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M1 1l4 4-4 4"
-            stroke="#7C5DFA"
-            strokeWidth="2"
-            fill="none"
-            fillRule="evenodd"
-          />
-        </Arrow>
-      </Link>
+      <Col area={"id"}>
+        <Link
+          to={`/invoices/${invoice.id}`}
+          onClick={() => onInvoiceSelect(invoice)}
+        >
+          <Id>{invoice.id}</Id>
+        </Link>
+      </Col>
+      <Col area={"paymentDue"}>
+        <PaymentDue>Due {formatDate(invoice.paymentDue)}</PaymentDue>
+      </Col>
+      <Col area={"clientName"}>
+        <ClientName>{invoice.clientName}</ClientName>
+      </Col>
+      <Col area={"totalDue"}>
+        <Total>{formatMoney(total)}</Total>
+      </Col>
+      <Col area={"statusPill"}>
+        <StatusPill status={invoice.status} />
+      </Col>
+      <Col area={"link"}>
+        {" "}
+        <Link
+          to={`/invoices/${invoice.id}`}
+          onClick={() => onInvoiceSelect(invoice)}
+        >
+          <Arrow xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M1 1l4 4-4 4"
+              stroke="#7C5DFA"
+              strokeWidth="2"
+              fill="none"
+              fillRule="evenodd"
+            />
+          </Arrow>
+        </Link>
+      </Col>
     </Container>
   );
 }

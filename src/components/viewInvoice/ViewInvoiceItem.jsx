@@ -4,10 +4,14 @@ import { formatMoney } from "../../helpers";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(2, auto);
+  grid-area: repeat(2, auto);
   grid-row-gap: 10px;
   align-items: center;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 2fr repeat(3, 1fr);
+    grid-template-rows: auto;
+  }
 `;
 const ItemName = styled.p`
   grid-column: 1 / 2;
@@ -25,6 +29,36 @@ const ItemQuantity = styled.p`
   font-size: 12px;
   font-weight: 700;
   transition: color 0.2s;
+
+  &::after {
+    content: "x";
+  }
+
+  @media (min-width: 768px) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: end;
+
+    &::after {
+      content: "";
+    }
+  }
+`;
+const ItemPrice = styled.p`
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  color: ${(props) =>
+    props.theme.themeName === "dark" ? "#888EB0" : "#7E88C3"};
+  font-size: 12px;
+  font-weight: 700;
+  transition: color 0.2s;
+  margin-left: 20px;
+
+  @media (min-width: 768px) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+    justify-self: end;
+  }
 `;
 const ItemTotal = styled.p`
   grid-column: 2 / 3;
@@ -34,6 +68,11 @@ const ItemTotal = styled.p`
   font-weight: 700;
   font-size: 12px;
   transition: color 0.2s;
+
+  @media (min-width: 768px) {
+    grid-column: 4 / 5;
+    grid-row: 1 / 2;
+  }
 `;
 
 export default function ViewInvoiceItem({ item }) {
@@ -41,9 +80,8 @@ export default function ViewInvoiceItem({ item }) {
   return (
     <Container>
       <ItemName>{item.name}</ItemName>
-      <ItemQuantity>
-        {item.quantity} x £ {formatMoney(price.toFixed(2))}
-      </ItemQuantity>
+      <ItemQuantity>{item.quantity}</ItemQuantity>
+      <ItemPrice>£ {formatMoney(price.toFixed(2))}</ItemPrice>
       <ItemTotal>£ {formatMoney(total.toFixed(2))}</ItemTotal>
     </Container>
   );

@@ -38,7 +38,16 @@ function App() {
             />
           )}
         />
-        <Route path="/" exact render={() => <Invoices invoices={invoices} />} />
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <Invoices
+              invoices={invoices}
+              handleInvoiceSelect={handleInvoiceSelect}
+            />
+          )}
+        />
       </Switch>
     </ThemeProvider>
   );

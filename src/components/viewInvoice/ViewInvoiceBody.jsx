@@ -4,49 +4,61 @@ import ViewInvoiceItemList from "./ViewInvoiceItemList";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "id ."
+    "senderAddress ."
+    "invoiceDate billTo"
+    "paymentDue billTo"
+    "sentTo ."
+    "itemList itemList";
   grid-row-gap: 30px;
   padding: 30px 20px;
   width: min(90%, 730px);
   background-color: ${(props) => props.theme.invoiceBg};
   border-radius: 8px;
   transition: background-color 0.2s;
+
+  @media (min-width: 768px) {
+    grid-template-areas:
+      "id . . senderAddress"
+      "invoiceDate billTo sentTo sentTo"
+      "paymentDue billTo . ."
+      "itemList itemList itemList itemList";
+  }
 `;
 
 const Col = styled.div`
-  grid-column: 1 / 2;
+  grid-area: ${(props) => props.area};
 
-  ${(props) =>
-    props.right &&
-    css`
-      grid-column: 2 / 3;
-    `}
-
-  ${(props) =>
-    props.stretch &&
-    css`
-      grid-column: 1 / 3;
-    `}
-
-  ${(props) =>
-    props.flexCol &&
-    css`
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    `}
+  @media (min-width: 768px) {
+    ${(props) =>
+      props.justifyRight &&
+      css`
+        justify-self: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      `}
+  }
 `;
 
 const Data = styled.p`
   font-size: 12px;
   font-weight: 500;
   text-transform: capitalize;
+  text-align: left;
   color: ${(props) => props.theme.fontSecColor};
   transition: color 0.2s;
 
   & + & {
     margin-top: 8px;
   }
+
+  ${(props) =>
+    props.marginY &&
+    css`
+      margin-bottom: 12px;
+    `}
 
   ${(props) =>
     props.highlight &&
@@ -63,7 +75,7 @@ const Data = styled.p`
     `}
 
     ${(props) =>
-      props.id &&
+      props.itemId &&
       css`
         color: ${(props) => props.theme.fontPriColor};
         font-weight: bold;
@@ -78,41 +90,43 @@ const Data = styled.p`
 export default function ViewInvoiceBody({ invoice }) {
   return (
     <Container>
-      <Col>
-        <Data id>{invoice.id}</Data>
+      <Col area={"id"}>
+        <Data itemId>{invoice.id}</Data>
         <Data>{invoice.description}</Data>
       </Col>
-      <Col>
+      <Col area={"senderAddress"} justifyRight>
         <Data>{invoice.senderAddress.street}</Data>
         <Data>{invoice.senderAddress.city}</Data>
         <Data>{invoice.senderAddress.postCode}</Data>
         <Data>{invoice.senderAddress.country}</Data>
       </Col>
-      <Col flexCol>
-        <div>
-          <Data>Invoice Date</Data>
-          <Data highlight>{formatDate(invoice.createdAt)}</Data>
-        </div>
-        <div>
-          <Data>Payment Due</Data>
-          <Data highlight>{formatDate(invoice.paymentDue)}</Data>
-        </div>
+      <Col area={"invoiceDate"}>
+        <Data>Invoice Date</Data>
+        <Data highlight>{formatDate(invoice.createdAt)}</Data>
       </Col>
-      <Col right>
+      <Col area={"paymentDue"}>
+        <Data>Payment Due</Data>
+        <Data highlight>{formatDate(invoice.paymentDue)}</Data>
+      </Col>
+      <Col area={"billTo"}>
         <Data>Bill To</Data>
-        <Data highlight>{invoice.clientName}</Data>
+        <Data highlight marginY>
+          {invoice.clientName}
+        </Data>
         <Data>{invoice.clientAddress.street}</Data>
         <Data>{invoice.clientAddress.city}</Data>
         <Data>{invoice.clientAddress.postCode}</Data>
         <Data>{invoice.clientAddress.country}</Data>
       </Col>
-      <Col stretch>
+      <Col area={"sentTo"}>
         <Data>Sent to</Data>
         <Data highlight lowercase>
           {invoice.clientEmail}
         </Data>
       </Col>
-      <ViewInvoiceItemList items={invoice.items} />
+      <Col area={"itemList"}>
+        <ViewInvoiceItemList items={invoice.items} />
+      </Col>
     </Container>
   );
 }

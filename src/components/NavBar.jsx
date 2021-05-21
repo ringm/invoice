@@ -44,8 +44,8 @@ const LogoContaier = styled.div`
   @media (min-width: 960px) {
     margin-right: 0;
     margin-bottom: auto;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;

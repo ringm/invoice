@@ -12,6 +12,14 @@ const Container = styled.div`
   right: 0;
   z-index: 1000;
   transition: background-color 0.2s;
+
+  @media (min-width: 960px) {
+    right: calc(100vw - 100px);
+    bottom: 0;
+    flex-direction: column;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
 `;
 const LogoContaier = styled.div`
   &::before {
@@ -24,14 +32,30 @@ const LogoContaier = styled.div`
     height: 50%;
     border-top-left-radius: 20px;
   }
-
   position: relative;
   background-color: #7c5dfa;
   margin-right: auto;
+  margin-bottom: 0;
   padding: 22px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   overflow: hidden;
+
+  @media (min-width: 960px) {
+    margin-right: 0;
+    margin-bottom: auto;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const LogoSvg = styled.svg`
+  position: relative;
+  width: 28px;
+  height: 26px;
 `;
 
 const ThemeButton = styled.div`
@@ -40,6 +64,11 @@ const ThemeButton = styled.div`
   height: 20px;
   cursor: pointer;
   margin-right: 20px;
+
+  @media (min-width: 960px) {
+    margin-right: 0;
+    margin-bottom: 30px;
+  }
 
   & div {
     display: flex;
@@ -50,14 +79,19 @@ const ThemeButton = styled.div`
     transition: transform 0.3s ease-out;
   }
 `;
-
 const AvatarContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 20px;
   border-left: 1px solid #494e6e;
-`;
 
+  @media (min-width: 960px) {
+    flex-direction: column;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #494e6e;
+  }
+`;
 const Avatar = styled.img`
   border-radius: 50%;
   width: 32px;
@@ -69,18 +103,13 @@ export default function NavBar({ onThemeToggle }) {
     <Container>
       <LogoContaier>
         <Link to={"/"}>
-          <svg
-            style={{ position: "relative" }}
-            xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="26"
-          >
+          <LogoSvg xmlns="http://www.w3.org/2000/svg">
             <path
               fill="#FFF"
               fillRule="evenodd"
               d="M20.513 0C24.965 2.309 28 6.91 28 12.21 28 19.826 21.732 26 14 26S0 19.826 0 12.21C0 6.91 3.035 2.309 7.487 0L14 12.9z"
             />
-          </svg>
+          </LogoSvg>
         </Link>
       </LogoContaier>
       <ThemeButton onClick={onThemeToggle}>

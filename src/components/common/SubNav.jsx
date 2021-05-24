@@ -26,14 +26,14 @@ const ArrowText = styled.p`
 
 const StyledLink = styled(Link)`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   text-decoration: none;
 `;
 
-export default function ViewInvoiceNav() {
+export default function ViewInvoiceNav({ linkTo, label }) {
   return (
     <Container>
-      <StyledLink to={"/invoices"}>
+      <StyledLink to={linkTo}>
         <Arrow xmlns="http://www.w3.org/2000/svg">
           <path
             d="M6.342.886L2.114 5.114l4.228 4.228"
@@ -43,7 +43,7 @@ export default function ViewInvoiceNav() {
             fillRule="evenodd"
           />
         </Arrow>
-        <ArrowText>Go back</ArrowText>
+        <ArrowText>{label}</ArrowText>
       </StyledLink>
     </Container>
   );

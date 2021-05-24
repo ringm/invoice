@@ -21,16 +21,26 @@ export const darkTheme = {
 };
 
 export const GlobalStyles = createGlobalStyle`
+  *, *::after, *::before {
+    box-sizing: border-box;
+  }
+
   body {
     background-color: ${(props) => props.theme.bodyBg};
     transition: background-color .2s;
     font-family: 'Spartan', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
   }
+
+  form {
+    width: 100%;
+  }
+
   a {
-    text-underline: none;
     text-decoration: none;
+  }
+  fieldset {
+    all: unset;
   }
 `;

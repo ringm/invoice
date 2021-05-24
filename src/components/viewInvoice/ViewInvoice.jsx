@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import ViewInvoiceNav from "./ViewInvoiceNav";
+import SubNav from '../common/SubNav';
 import ViewInvoiceHeader from "./ViewInvoiceHeader";
 import ViewInvoiceBody from "./ViewInvoiceBody";
 import ViewInvoiceFooter from "./ViewInvoiceFooter";
-import UseWindowDimension from "../common/UseWindowDimension";
+
 
 const Container = styled.div`
   display: grid;
@@ -15,14 +15,14 @@ const Container = styled.div`
   margin-top: 100px;
 `;
 
-export default function ViewInvoice({ invoice }) {
-  const { width: deviceWidth } = UseWindowDimension();
+export default function ViewInvoice({ invoice, deviceWidth }) {
+  
   return (
     <Container>
-      <ViewInvoiceNav />
+      <SubNav linkTo={'/invoices'} label={"Go back"} />
       <ViewInvoiceHeader invoice={invoice} deviceWidth={deviceWidth} />
       <ViewInvoiceBody invoice={invoice} />
-      {deviceWidth < 768 ? <ViewInvoiceFooter /> : null}
+      {deviceWidth < 768 ? <ViewInvoiceFooter invoice={invoice} /> : null}
     </Container>
   );
 }

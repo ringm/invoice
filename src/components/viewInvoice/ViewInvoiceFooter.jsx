@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import { Button } from "../common/Button";
 
@@ -17,13 +18,15 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-export default function ViewInvoiceFooter() {
+export default function ViewInvoiceFooter({ invoice }) {
   return (
     <Bg>
       <Container>
-        <Button bg={"#252945"} color={"#fff"}>
-          Edit
-        </Button>
+        <Link to={`/invoices/edit/${invoice.id}`}>
+          <Button bg={"#252945"} color={"#fff"}>
+            Edit
+          </Button>
+        </Link>
         <Button bg={"#EC5757"} color={"#fff"}>
           Delete
         </Button>

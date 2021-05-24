@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import StatusPill from "../common/StatusPill";
 import { Button } from "../common/Button";
@@ -29,9 +30,11 @@ export default function ViewInvoiceHeader({ invoice, deviceWidth }) {
       <StatusPill status={invoice.status} />
       {deviceWidth >= 768 ? (
         <div>
-          <Button bg={"#252945"} color={"#fff"}>
-            Edit
-          </Button>
+          <Link to={`/invoices/edit/${invoice.id}`}>
+            <Button bg={"#252945"} color={"#fff"}>
+              Edit
+            </Button>
+          </Link>
           <Button bg={"#EC5757"} color={"#fff"}>
             Delete
           </Button>

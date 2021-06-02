@@ -99,7 +99,7 @@ const Col = styled.div`
 
 export default function Invoice({ invoice, onInvoiceSelect }) {
   const total = invoice.items
-    .reduce((acc, curr) => curr.total + acc, 0)
+    .reduce((acc, curr) => parseInt(curr.total) + acc, 0)
     .toFixed(2);
 
   return (

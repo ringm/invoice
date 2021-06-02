@@ -125,7 +125,7 @@ export default function ViewInvoiceBody({ invoice }) {
         </Data>
       </Col>
       <Col area={"itemList"}>
-        <ViewInvoiceItemList items={invoice.items} />
+        <ViewInvoiceItemList items={invoice.items} total={invoice.total} />
       </Col>
     </Container>
   );

@@ -76,13 +76,13 @@ const ItemTotal = styled.p`
 `;
 
 export default function ViewInvoiceItem({ item }) {
-  const { price, total } = item;
+  const { name, price, quantity, total } = item;
   return (
     <Container>
-      <ItemName>{item.name}</ItemName>
-      <ItemQuantity>{item.quantity}</ItemQuantity>
-      <ItemPrice>£ {formatMoney(price.toFixed(2))}</ItemPrice>
-      <ItemTotal>£ {formatMoney(total.toFixed(2))}</ItemTotal>
+      <ItemName>{name}</ItemName>
+      <ItemQuantity>{quantity}</ItemQuantity>
+      <ItemPrice>£ {price}</ItemPrice>
+      <ItemTotal>£ {total}</ItemTotal>
     </Container>
   );
 }

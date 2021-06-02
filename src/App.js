@@ -23,6 +23,16 @@ function App() {
     setSelectedInvoice(invoice);
   }
 
+  function handleSave(invoice) {
+    const newInvoices = [...invoices];
+    const index = newInvoices.findIndex(
+      (newInvoice) => newInvoice.id === invoice.id
+    );
+    newInvoices[index] = invoice;
+    setInvoices(newInvoices);
+    setSelectedInvoice(invoice);
+  }
+
   return (
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
       <GlobalStyles />
@@ -30,11 +40,19 @@ function App() {
       <Switch>
         <Route
           path="/invoices/edit/:id"
-          render={() => <EditInvoice invoice={selectedInvoice} />}
+          render={(props) => (
+            <EditInvoice
+              invoice={selectedInvoice}
+              onSave={handleSave}
+              {...props}
+            />
+          )}
         />
         <Route
           path="/invoices/:id"
-          render={() => <ViewInvoice invoice={selectedInvoice} deviceWidth={deviceWidth} />}
+          render={() => (
+            <ViewInvoice invoice={selectedInvoice} deviceWidth={deviceWidth} />
+          )}
         />
         <Route
           path="/invoices"

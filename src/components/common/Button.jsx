@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Button = styled.button`
   border: none;
@@ -12,7 +12,9 @@ export const Button = styled.button`
   min-width: 85px;
   cursor: pointer;
 
-  & + & {
-    margin-left: 15px;
-  }
+  ${(props) =>
+    props.fullWidth &&
+    css`
+      width: 100%;
+    `}
 `;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import StatusPill from "../common/StatusPill";
 import { Button } from "../common/Button";
@@ -16,6 +16,12 @@ const Container = styled.div`
   transition: background-color 0.2s;
 `;
 
+const StyledDiv = styled.div`
+  & > * {
+    margin-left: 15px;
+  }
+`;
+
 const HeaderTitle = styled.p`
   color: ${(props) => props.theme.fontSecColor};
   font-weight: 500;
@@ -29,7 +35,7 @@ export default function ViewInvoiceHeader({ invoice, deviceWidth }) {
       <HeaderTitle>Status</HeaderTitle>
       <StatusPill status={invoice.status} />
       {deviceWidth >= 768 ? (
-        <div>
+        <StyledDiv>
           <Link to={`/invoices/edit/${invoice.id}`}>
             <Button bg={"#252945"} color={"#fff"}>
               Edit
@@ -39,9 +45,9 @@ export default function ViewInvoiceHeader({ invoice, deviceWidth }) {
             Delete
           </Button>
           <Button bg={"#7C5DFA"} color={"#fff"}>
-            Mark as Paid
+            {invoice.status === "paid" ? "Mark as Unpaid" : "Mark as Paid"}
           </Button>
-        </div>
+        </StyledDiv>
       ) : null}
     </Container>
   );

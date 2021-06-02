@@ -56,8 +56,7 @@ const InvoiceTotalAmount = styled.p`
   color: #fff;
 `;
 
-export default function ViewInvoiceItemList({ items }) {
-  const amountDue = items.reduce((acc, curr) => acc + curr.total, 0).toFixed(2);
+export default function ViewInvoiceItemList({ items, total }) {
   return (
     <Container>
       <InvoiceItemList>
@@ -73,7 +72,7 @@ export default function ViewInvoiceItemList({ items }) {
       </InvoiceItemList>
       <InvoiceTotalContainer>
         <InvoiceTotalTitle>Amount Due</InvoiceTotalTitle>
-        <InvoiceTotalAmount>£ {formatMoney(amountDue)}</InvoiceTotalAmount>
+        <InvoiceTotalAmount>£ {total}</InvoiceTotalAmount>
       </InvoiceTotalContainer>
     </Container>
   );

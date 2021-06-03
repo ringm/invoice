@@ -13,7 +13,8 @@ function App() {
   const [theme, setTheme] = useState("dark");
   const { width: deviceWidth } = UseWindowDimension();
   const [invoices, setInvoices] = useState(invoiceData);
-  const [selectedInvoice, setSelectedInvoice] = useState(invoiceData[0]);
+  const [filteredInvoices, setFilteredInvoices] = useState(invoiceData);
+  const [selectedInvoice, setSelectedInvoice] = useState({});
 
   function handleThemeToggle() {
     theme === "light" ? setTheme("dark") : setTheme("light");
@@ -21,6 +22,14 @@ function App() {
 
   function handleInvoiceSelect(invoice) {
     setSelectedInvoice(invoice);
+  }
+
+  function handleInvoiceFilter(status) {
+    if (status === "") return setFilteredInvoices(invoices);
+    const newfilteredInvoices = invoices.filter(
+      (invoice) => invoice.status === status
+    );
+    setFilteredInvoices(newfilteredInvoices);
   }
 
   function handleSave(invoice) {
@@ -31,6 +40,22 @@ function App() {
     newInvoices[index] = invoice;
     setInvoices(newInvoices);
     setSelectedInvoice(invoice);
+  }
+
+  function handleInvoiceDelete(id) {
+    const newInvoices = invoices.filter((invoice) => invoice.id !== id);
+    setInvoices(newInvoices);
+    setFilteredInvoices(newInvoices);
+  }
+
+  function handleStatusChange(id) {
+    const currentInvoices = [...invoices];
+    const idx = currentInvoices.findIndex((invoice) => invoice.id === id);
+    const currentInvoice = invoices.find((invoice) => invoice.id === id);
+    currentInvoice.status =
+      currentInvoice.status === "pending" ? "paid" : "pending";
+    currentInvoices[idx] = currentInvoice;
+    setInvoices(currentInvoices);
   }
 
   return (
@@ -51,14 +76,20 @@ function App() {
         <Route
           path="/invoices/:id"
           render={() => (
-            <ViewInvoice invoice={selectedInvoice} deviceWidth={deviceWidth} />
+            <ViewInvoice
+              invoice={selectedInvoice}
+              deviceWidth={deviceWidth}
+              onStatusChange={handleStatusChange}
+              onInvoiceDelete={handleInvoiceDelete}
+            />
           )}
         />
         <Route
           path="/invoices"
           render={() => (
             <Invoices
-              invoices={invoices}
+              invoices={filteredInvoices}
+              onInvoiceFilter={handleInvoiceFilter}
               handleInvoiceSelect={handleInvoiceSelect}
             />
           )}
@@ -68,7 +99,8 @@ function App() {
           exact
           render={() => (
             <Invoices
-              invoices={invoices}
+              invoices={filteredInvoices}
+              onInvoiceFilter={handleInvoiceFilter}
               handleInvoiceSelect={handleInvoiceSelect}
             />
           )}

@@ -116,7 +116,7 @@ function handleSubmit(e) {
 }
 
 export default function EditInvoice({ invoice, onSave, history }) {
-  const [editedInvoice, setEditedInvoice] = useState({ ...invoice });
+  const [editedInvoice, setEditedInvoice] = useState(_.cloneDeep(invoice));
 
   function handleChange(e, property) {
     const newInvoice = _.cloneDeep(editedInvoice);
@@ -125,7 +125,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
   }
 
   function handleItemListChange(itemList) {
-    const newInvoice = { ...editedInvoice };
+    const newInvoice = _.cloneDeep(editedInvoice);
     newInvoice.items = itemList;
     newInvoice.total = itemList.reduce(
       (acc, curr) => parseInt(curr.total) + acc,
@@ -270,6 +270,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
           </Button>
         </Link>
         <Button
+          type="button"
           bg={"#7C5DFA"}
           color={"#FFF"}
           onClick={() => handleSave(editedInvoice)}

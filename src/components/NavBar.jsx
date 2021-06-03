@@ -16,6 +16,7 @@ const Container = styled.div`
   @media (min-width: 960px) {
     right: calc(100vw - 100px);
     bottom: 0;
+    width: 80px;
     flex-direction: column;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -44,8 +45,8 @@ const LogoContaier = styled.div`
   @media (min-width: 960px) {
     margin-right: 0;
     margin-bottom: auto;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;

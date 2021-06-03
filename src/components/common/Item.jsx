@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import FormInput from "./FormInput";
 
@@ -31,12 +31,10 @@ const DeleteIcon = styled.svg`
   transform: translateY(10px);
 `;
 
-export default function Item({ item, onItemsChange, idx }) {
-  const [editedItem, setEditedItem] = useState({ ...item });
+export default function Item({ item, onItemsChange, idx, onItemDelete }) {
   function handleItemChange(e, name) {
-    const newItem = { ...editedItem };
+    const newItem = { ...item };
     newItem[name] = e.currentTarget.value;
-    setEditedItem(newItem);
     onItemsChange(newItem, idx);
   }
 
@@ -47,7 +45,7 @@ export default function Item({ item, onItemsChange, idx }) {
         type={"text"}
         name={"name"}
         label={"Item Name"}
-        value={editedItem.name}
+        value={item.name}
         onChange={handleItemChange}
       />
       <FormInput
@@ -55,27 +53,27 @@ export default function Item({ item, onItemsChange, idx }) {
         type={"number"}
         name={"quantity"}
         label={"Qty."}
-        value={editedItem.quantity}
+        value={item.quantity}
         onChange={handleItemChange}
       />
       <FormInput
         area={"price"}
-        type={"number"}
+        type={"text"}
         name={"price"}
         label={"Price"}
-        value={editedItem.price}
+        value={item.price}
         onChange={handleItemChange}
       />
       <FormInput
         area={"total"}
-        type={"number"}
+        type={"text"}
         name={"total"}
         label={"Total"}
-        value={editedItem.total}
+        value={item.total}
         onChange={handleItemChange}
         noBg
       />
-      <IconContainer>
+      <IconContainer onClick={() => onItemDelete(idx)}>
         <DeleteIcon>
           <path
             d="M11.583 3.556v10.666c0 .982-.795 1.778-1.777 1.778H2.694a1.777 1.777 0 01-1.777-1.778V3.556h10.666zM8.473 0l.888.889h3.111v1.778H.028V.889h3.11L4.029 0h4.444z"

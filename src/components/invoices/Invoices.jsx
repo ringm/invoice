@@ -13,10 +13,17 @@ const Container = styled.div`
   margin-bottom: 60px;
 `;
 
-export default function Invoices({ invoices, handleInvoiceSelect }) {
+export default function Invoices({
+  invoices,
+  handleInvoiceSelect,
+  onInvoiceFilter
+}) {
   return (
     <Container>
-      <InvoiceHeader count={invoices.length} />
+      <InvoiceHeader
+        count={invoices.length}
+        onInvoiceFilter={onInvoiceFilter}
+      />
       {invoices.length === 0 ? (
         <NoInvoices />
       ) : (

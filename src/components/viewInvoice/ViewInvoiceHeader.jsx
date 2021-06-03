@@ -29,7 +29,12 @@ const HeaderTitle = styled.p`
   transition: color 0.2s;
 `;
 
-export default function ViewInvoiceHeader({ invoice, deviceWidth }) {
+export default function ViewInvoiceHeader({
+  invoice,
+  deviceWidth,
+  onInvoiceDelete,
+  onStatusChange
+}) {
   return (
     <Container>
       <HeaderTitle>Status</HeaderTitle>
@@ -41,10 +46,20 @@ export default function ViewInvoiceHeader({ invoice, deviceWidth }) {
               Edit
             </Button>
           </Link>
-          <Button bg={"#EC5757"} color={"#fff"}>
-            Delete
-          </Button>
-          <Button bg={"#7C5DFA"} color={"#fff"}>
+          <Link to={`/invoices/`}>
+            <Button
+              bg={"#EC5757"}
+              color={"#fff"}
+              onClick={() => onInvoiceDelete(invoice.id)}
+            >
+              Delete
+            </Button>
+          </Link>
+          <Button
+            bg={"#7C5DFA"}
+            color={"#fff"}
+            onClick={() => onStatusChange(invoice.id)}
+          >
             {invoice.status === "paid" ? "Mark as Unpaid" : "Mark as Paid"}
           </Button>
         </StyledDiv>

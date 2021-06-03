@@ -24,6 +24,23 @@ export default function ItemList({ items, onItemListChange, area }) {
     onItemListChange(newItems);
   }
 
+  function handleAddItem(e) {
+    e.preventDefault();
+    const newItem = {
+      name: "",
+      quantity: 1,
+      price: 1,
+      total: 1
+    };
+    onItemListChange([...items, newItem]);
+  }
+
+  function handleRemoveItem(idx) {
+    const currentList = [...items];
+    currentList.splice(idx, 1);
+    onItemListChange(currentList);
+  }
+
   return (
     <StyledDiv area={area}>
       <Title>Item List</Title>
@@ -32,10 +49,16 @@ export default function ItemList({ items, onItemListChange, area }) {
           key={idx}
           item={item}
           onItemsChange={handleItemsChange}
+          onItemDelete={handleRemoveItem}
           idx={idx}
         />
       ))}
-      <Button bg={"#252945"} color={"#888EB0"} fullWidth>
+      <Button
+        bg={"#252945"}
+        color={"#888EB0"}
+        fullWidth
+        onClick={(e) => handleAddItem(e)}
+      >
         Add New Item
       </Button>
     </StyledDiv>

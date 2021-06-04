@@ -27,7 +27,7 @@ const StyledFilterBox = styled.div`
 export default function FilterBox({
   visible,
   filterOptions,
-  activeFilter,
+  currentFilter,
   onFilterSelect
 }) {
   return (
@@ -37,7 +37,7 @@ export default function FilterBox({
           <FilterOption
             key={option}
             id={option}
-            active={activeFilter}
+            active={currentFilter}
             onClick={onFilterSelect}
           />
         );

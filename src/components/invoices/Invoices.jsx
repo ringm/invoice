@@ -15,14 +15,16 @@ const Container = styled.div`
 
 export default function Invoices({
   invoices,
-  handleInvoiceSelect,
-  onInvoiceFilter
+  onInvoiceSelect,
+  onFilterSelect,
+  currentFilter
 }) {
   return (
     <Container>
       <InvoiceHeader
         count={invoices.length}
-        onInvoiceFilter={onInvoiceFilter}
+        onFilterSelect={onFilterSelect}
+        currentFilter={currentFilter}
       />
       {invoices.length === 0 ? (
         <NoInvoices />
@@ -32,7 +34,7 @@ export default function Invoices({
             <Invoice
               key={invoice.id}
               invoice={invoice}
-              onInvoiceSelect={handleInvoiceSelect}
+              onInvoiceSelect={onInvoiceSelect}
             />
           ))}
         </InvoiceList>

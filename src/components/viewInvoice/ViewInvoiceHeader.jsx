@@ -58,7 +58,7 @@ export default function ViewInvoiceHeader({
           <Button
             bg={"#7C5DFA"}
             color={"#fff"}
-            onClick={() => onStatusChange(invoice.id)}
+            onClick={() => onStatusChange(invoice.id, invoice.status)}
           >
             {invoice.status === "paid" ? "Mark as Unpaid" : "Mark as Paid"}
           </Button>

@@ -103,11 +103,14 @@ const New = styled.p`
     `}
 `;
 
-export default function InvoiceHeader({ count, onInvoiceFilter }) {
+export default function InvoiceHeader({
+  count,
+  onFilterSelect,
+  currentFilter
+}) {
   const [filterBox, setFilterBox] = useState(false);
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
   const filterOptions = ["pending", "paid"];
-  const [activeFilter, setActiveFilter] = useState("");
 
   function handleFilterBox() {
     filterBox ? setFilterBox(false) : setFilterBox(true);
@@ -118,9 +121,8 @@ export default function InvoiceHeader({ count, onInvoiceFilter }) {
   }
 
   function handleFilterSelect(id) {
-    const status = id === activeFilter ? "" : id;
-    setActiveFilter(status);
-    onInvoiceFilter(status);
+    const status = id === currentFilter ? "" : id;
+    onFilterSelect(status);
   }
 
   useEffect(() => {
@@ -139,8 +141,8 @@ export default function InvoiceHeader({ count, onInvoiceFilter }) {
       </TitleContainer>
       <FilterContainer>
         <Filter onClick={() => handleFilterBox()}>
-          {deviceWidth >= 768 && activeFilter !== ""
-            ? `Filter by ${activeFilter}`
+          {deviceWidth >= 768 && currentFilter !== ""
+            ? `Filter by ${currentFilter}`
             : "Filter"}
         </Filter>
         <FilterIcon
@@ -157,9 +159,9 @@ export default function InvoiceHeader({ count, onInvoiceFilter }) {
         </FilterIcon>
         <FilterBox
           visible={filterBox}
-          activeFilter={activeFilter}
+          currentFilter={currentFilter}
           filterOptions={filterOptions}
-          onFilterSelect={handleFilterSelect}
+          onFilterSelect={onFilterSelect}
         />
       </FilterContainer>
       <ButtonContainer width={deviceWidth}>

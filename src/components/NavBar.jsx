@@ -103,7 +103,7 @@ export default function NavBar({ onThemeToggle }) {
   return (
     <Container>
       <LogoContaier>
-        <Link to={"/"}>
+        <Link to={"/invoices"}>
           <LogoSvg xmlns="http://www.w3.org/2000/svg">
             <path
               fill="#FFF"

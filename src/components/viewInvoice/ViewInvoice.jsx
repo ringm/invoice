@@ -31,7 +31,13 @@ export default function ViewInvoice({
         onStatusChange={onStatusChange}
       />
       <ViewInvoiceBody invoice={invoice} />
-      {deviceWidth < 768 ? <ViewInvoiceFooter invoice={invoice} /> : null}
+      {deviceWidth < 768 ? (
+        <ViewInvoiceFooter
+          invoice={invoice}
+          onInvoiceDelete={onInvoiceDelete}
+          onStatusChange={onStatusChange}
+        />
+      ) : null}
     </Container>
   );
 }

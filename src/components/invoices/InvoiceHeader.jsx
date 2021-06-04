@@ -120,13 +120,9 @@ export default function InvoiceHeader({
     setDeviceWidth(window.innerWidth);
   }
 
-  function handleFilterSelect(id) {
-    const status = id === currentFilter ? "" : id;
-    onFilterSelect(status);
-  }
-
   useEffect(() => {
     window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (

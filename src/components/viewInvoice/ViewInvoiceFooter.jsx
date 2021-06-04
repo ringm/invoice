@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../common/Button";
 
@@ -18,7 +18,11 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-export default function ViewInvoiceFooter({ invoice }) {
+export default function ViewInvoiceFooter({
+  invoice,
+  onInvoiceDelete,
+  onStatusChange
+}) {
   return (
     <Bg>
       <Container>
@@ -27,11 +31,21 @@ export default function ViewInvoiceFooter({ invoice }) {
             Edit
           </Button>
         </Link>
-        <Button bg={"#EC5757"} color={"#fff"}>
-          Delete
-        </Button>
-        <Button bg={"#7C5DFA"} color={"#fff"}>
-          Mark as Paid
+        <Link to={`/invoices`}>
+          <Button
+            bg={"#EC5757"}
+            color={"#fff"}
+            onClick={() => onInvoiceDelete(invoice.id)}
+          >
+            Delete
+          </Button>
+        </Link>
+        <Button
+          bg={"#7C5DFA"}
+          color={"#fff"}
+          onClick={() => onStatusChange(invoice.id, invoice.status)}
+        >
+          {invoice.status === "paid" ? "Mark as Unpaid" : "Mark as Paid"}
         </Button>
       </Container>
     </Bg>

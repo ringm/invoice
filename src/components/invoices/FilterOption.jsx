@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
 import styled, { css } from "styled-components";
 
 const FilterRow = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 const FilterCheckbox = styled.div`
@@ -11,31 +12,32 @@ const FilterCheckbox = styled.div`
   position: relative;
   width: 16px;
   height: 16px;
-  background-color: ${props => props.theme.themeName === 'light' ? '#DFE3FA' : '#1E2139'};
+  background-color: ${(props) =>
+    props.theme.themeName === "light" ? "#DFE3FA" : "#1E2139"};
   border-radius: 2px;
   margin-right: 12px;
   cursor: pointer;
-  transition: background-color .2s;
+  transition: background-color 0.2s;
 
   &:hover {
-    border: 1px solid #7C5DFA;
+    border: 1px solid #7c5dfa;
 
     ${(props) =>
       props.id === props.active &&
       css`
         border: none;
-    `}
+      `}
   }
 
   ${(props) =>
     props.id === props.active &&
     css`
-      background-color: #7C5DFA;
+      background-color: #7c5dfa;
     `}
 
   &::after {
     display: none;
-    content: '';
+    content: "";
     position: absolute;
     width: 16px;
     height: 16px;
@@ -43,21 +45,23 @@ const FilterCheckbox = styled.div`
     background-position: center;
     background-repeat: no-repeat;
 
-    ${props => props.id === props.active && css`
-      display: block;
-    `}
+    ${(props) =>
+      props.id === props.active &&
+      css`
+        display: block;
+      `}
   }
 `;
 
 const FilterText = styled.p`
-  color: ${props => props.theme.themeName === 'light' ? '#1E2139' : '#FFF' };
+  color: ${(props) => (props.theme.themeName === "light" ? "#1E2139" : "#FFF")};
   font-weight: 400;
   font-size: 12px;
   text-transform: capitalize;
   letter-spacing: 1px;
   user-select: none;
   cursor: pointer;
-  transition: color .2s;
+  transition: color 0.2s;
 
   ${(props) =>
     props.id === props.active &&

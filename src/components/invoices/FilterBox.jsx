@@ -3,7 +3,6 @@ import FilterOption from "./FilterOption";
 
 const StyledFilterBox = styled.div`
   width: 150px;
-  height: 95px;
   background-color: ${(props) =>
     props.theme.themeName === "light" ? "#FFF" : "#252945"};
   border-radius: 8px;

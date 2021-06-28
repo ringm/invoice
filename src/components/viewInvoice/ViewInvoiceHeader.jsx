@@ -32,7 +32,7 @@ const HeaderTitle = styled.p`
 export default function ViewInvoiceHeader({
   invoice,
   deviceWidth,
-  onInvoiceDelete,
+  onModalVisibilityChange,
   onStatusChange
 }) {
   return (
@@ -46,15 +46,13 @@ export default function ViewInvoiceHeader({
               Edit
             </Button>
           </Link>
-          <Link to={`/invoices/`}>
-            <Button
-              bg={"#EC5757"}
-              color={"#fff"}
-              onClick={() => onInvoiceDelete(invoice.id)}
-            >
-              Delete
-            </Button>
-          </Link>
+          <Button
+            bg={"#EC5757"}
+            color={"#fff"}
+            onClick={onModalVisibilityChange}
+          >
+            Delete
+          </Button>
           <Button
             bg={"#7C5DFA"}
             color={"#fff"}

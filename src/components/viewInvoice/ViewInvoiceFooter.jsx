@@ -6,7 +6,7 @@ import { Button } from "../common/Button";
 const Bg = styled.div`
   background-color: ${(props) => props.theme.navBg};
   transition: background-color 0.2s;
-  width 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   padding: 20px 0;
@@ -20,7 +20,7 @@ const Container = styled.div`
 
 export default function ViewInvoiceFooter({
   invoice,
-  onInvoiceDelete,
+  onModalVisibilityChange,
   onStatusChange
 }) {
   return (
@@ -31,15 +31,9 @@ export default function ViewInvoiceFooter({
             Edit
           </Button>
         </Link>
-        <Link to={`/invoices`}>
-          <Button
-            bg={"#EC5757"}
-            color={"#fff"}
-            onClick={() => onInvoiceDelete(invoice.id)}
-          >
-            Delete
-          </Button>
-        </Link>
+        <Button bg={"#EC5757"} color={"#fff"} onClick={onModalVisibilityChange}>
+          Delete
+        </Button>
         <Button
           bg={"#7C5DFA"}
           color={"#fff"}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import FilterBox from "./FilterBox";
+import { Link } from "react-router-dom";
+import { customAlphabet } from "nanoid";
 
 const Container = styled.div`
   display: flex;
@@ -111,6 +113,7 @@ export default function InvoiceHeader({
   const [filterBox, setFilterBox] = useState(false);
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
   const filterOptions = ["pending", "paid"];
+  const newid = customAlphabet("1234567890ABCDEFGHIJK", 6);
 
   function handleFilterBox() {
     filterBox ? setFilterBox(false) : setFilterBox(true);
@@ -160,20 +163,22 @@ export default function InvoiceHeader({
           onFilterSelect={onFilterSelect}
         />
       </FilterContainer>
-      <ButtonContainer width={deviceWidth}>
-        <AddIconContainer>
-          <AddIcon>
-            <path
-              d="M6.313 10.023v-3.71h3.71v-2.58h-3.71V.023h-2.58v3.71H.023v2.58h3.71v3.71z"
-              fill="#7C5DFA"
-              fillRule="nonzero"
-            />
-          </AddIcon>
-        </AddIconContainer>
-        <New width={deviceWidth}>
-          {deviceWidth < 768 ? "New" : "New Invoice"}
-        </New>
-      </ButtonContainer>
+      <Link to={`/invoices/new/${newid()}`}>
+        <ButtonContainer width={deviceWidth}>
+          <AddIconContainer>
+            <AddIcon>
+              <path
+                d="M6.313 10.023v-3.71h3.71v-2.58h-3.71V.023h-2.58v3.71H.023v2.58h3.71v3.71z"
+                fill="#7C5DFA"
+                fillRule="nonzero"
+              />
+            </AddIcon>
+          </AddIconContainer>
+          <New width={deviceWidth}>
+            {deviceWidth < 768 ? "New" : "New Invoice"}
+          </New>
+        </ButtonContainer>
+      </Link>
     </Container>
   );
 }

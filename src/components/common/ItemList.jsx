@@ -16,7 +16,7 @@ const Title = styled.h2`
   margin-bottom: 0;
 `;
 
-export default function ItemList({ items, onItemListChange, area }) {
+export default function ItemList({ items, onItemListChange, area, errors }) {
   function handleItemsChange(item, idx) {
     const newItems = [...items];
     newItems[idx] = item;
@@ -51,6 +51,7 @@ export default function ItemList({ items, onItemListChange, area }) {
           onItemsChange={handleItemsChange}
           onItemDelete={handleRemoveItem}
           idx={idx}
+          error={errors ? errors[idx] : null}
         />
       ))}
       <Button

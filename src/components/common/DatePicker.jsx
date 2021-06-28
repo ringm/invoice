@@ -1,12 +1,7 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { createGlobalStyle } from "styled-components";
 import { DateSingleInput } from "@datepicker-react/styled";
 import styled, { ThemeProvider } from "styled-components";
-
-const initialState = {
-  date: null,
-  showDatepicker: false
-};
 
 const GlobalStyle = createGlobalStyle`
   .sc-fXazdy.bShsOz {
@@ -31,17 +26,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "focusChange":
-      return { ...state, showDatepicker: action.payload };
-    case "dateChange":
-      return action.payload;
-    default:
-      throw new Error();
-  }
-}
-
 const StyledDiv = styled.div`
   grid-area: ${(props) => props.area};
 `;
@@ -54,9 +38,13 @@ const StyledLabel = styled.p`
   color: ${(props) => props.theme.fontSecColor};
 `;
 
-export default function DatePicker({ area }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+export default function DatePicker({
+  area,
+  date,
+  value,
+  onDateChange,
+  onFocusChange
+}) {
   return (
     <StyledDiv area={area}>
       <GlobalStyle />
@@ -112,13 +100,13 @@ export default function DatePicker({ area }) {
         <StyledLabel>Invoice Date</StyledLabel>
         <DateSingleInput
           onDateChange={(data) =>
-            dispatch({ type: "dateChange", payload: data })
+            onDateChange({ type: "dateChange", payload: data })
           }
           onFocusChange={(focusedInput) =>
-            dispatch({ type: "focusChange", payload: focusedInput })
+            onFocusChange({ type: "focusChange", payload: focusedInput })
           }
-          date={state.date} // Date or null
-          showDatepicker={state.showDatepicker} // Boolean
+          date={value} // Date or null
+          showDatepicker={date.showDatepicker} // Boolean
         />
       </ThemeProvider>
     </StyledDiv>

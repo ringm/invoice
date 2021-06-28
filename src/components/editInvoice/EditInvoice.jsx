@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+import _ from "lodash";
+import Joi from "joi-browser";
+import { dateToDatabase, addDays } from "../../helpers";
 import SubNav from "../common/SubNav";
 import FormInput from "../common/FormInput";
 import SelectInput from "../common/SelectInput";
 import DatePicker from "../common/DatePicker";
 import ItemList from "../common/ItemList";
+import CreateModal from "../common/CreateModal";
 import { Button } from "../common/Button";
-import _ from "lodash";
 
 const Container = styled.div`
   display: flex;
+  overflow-y: hidden;
   flex-direction: column;
   align-items: center;
   margin-top: 100px;
@@ -115,13 +119,122 @@ function handleSubmit(e) {
   e.preventDefault();
 }
 
-export default function EditInvoice({ invoice, onSave, history }) {
+function reducer(state, action) {
+  switch (action.type) {
+    case "focusChange":
+      return { ...state, showDatepicker: action.payload };
+    case "dateChange":
+      return action.payload;
+    default:
+      throw new Error();
+  }
+}
+
+export default function EditInvoice({
+  title,
+  invoice,
+  onSave,
+  history,
+  match
+}) {
   const [editedInvoice, setEditedInvoice] = useState(_.cloneDeep(invoice));
+  const [errors, setErrors] = useState({});
+  const [dueDate, setDueDate] = useState(15);
+  const [modalVisibility, setModalVisibility] = useState(false);
+  const [state, dispatch] = useReducer(reducer, {
+    date: new Date(invoice.createdAt),
+    showDatepicker: false
+  });
+
+  const schema = {
+    id: Joi.string().required(),
+    createdAt: Joi.string().required(),
+    paymentDue: Joi.string().required(),
+    description: Joi.string().required().label("Description"),
+    clientName: Joi.string().required().label("Client's Name"),
+    clientEmail: Joi.string().email().required().label("Client's Email"),
+    status: Joi.string().required(),
+    paymentTerms: Joi.number().required(),
+    senderAddress: Joi.object({
+      street: Joi.string().required().label("Street"),
+      city: Joi.string().required().label("City"),
+      postCode: Joi.string().required().label("Post Code"),
+      country: Joi.string().required().label("Country")
+    }),
+    clientAddress: Joi.object({
+      street: Joi.string().required().label("Client's street"),
+      city: Joi.string().required().label("Client's city"),
+      postCode: Joi.string().required().label("Client's post code"),
+      country: Joi.string().required().label("Client's country")
+    }),
+    items: Joi.array().items(
+      Joi.object({
+        name: Joi.string().required().label("Item name"),
+        quantity: Joi.number().required(),
+        price: Joi.number().required().label("Item price"),
+        total: Joi.number().required()
+      })
+    ),
+    total: Joi.number().required()
+  };
+
+  useEffect(() => {
+    if (match.path === "/invoices/new/:id") {
+      const currentInvoice = { ...editedInvoice };
+      currentInvoice.id = match.params.id;
+      setEditedInvoice(currentInvoice);
+    }
+  }, []);
+
+  function handleModalVisibility() {
+    const errs = validate();
+    if (errs === null) setModalVisibility(!modalVisibility);
+  }
+
+  function validate() {
+    const result = Joi.validate(editedInvoice, schema, { abortEarly: false });
+    if (!result.error) return null;
+    const err = {};
+    result.error.details.map((e) => {
+      if (e.path.length === 1) {
+        return (err[e.path[0]] = e.message);
+      } else if (e.path.length === 2) {
+        return (err[e.path[0]] = { ...err[e.path[0]], [e.path[1]]: e.message });
+      } else {
+        return (err[e.path[0]] = [err[e.path[0]], { [e.path[2]]: e.message }]);
+      }
+    });
+    setErrors(err);
+    return err;
+  }
 
   function handleChange(e, property) {
     const newInvoice = _.cloneDeep(editedInvoice);
     _.set(newInvoice, property, e.currentTarget.value);
     setEditedInvoice(newInvoice);
+  }
+
+  function handleDateChange(obj) {
+    const newInvoice = _.cloneDeep(editedInvoice);
+    _.set(newInvoice, "createdAt", dateToDatabase(obj.payload.date));
+    const paymentDue = addDays(obj.payload.date, dueDate);
+    _.set(newInvoice, "paymentDue", dateToDatabase(paymentDue));
+    dispatch(obj);
+    setEditedInvoice(newInvoice);
+  }
+
+  function handleDateEndChange(days) {
+    setDueDate(parseInt(days));
+    if (state.date === null) return;
+    const newInvoice = _.cloneDeep(editedInvoice);
+    const startDate = state.date;
+    const dueDate = addDays(startDate, parseInt(days));
+    _.set(newInvoice, "paymentDue", dateToDatabase(dueDate));
+    setEditedInvoice(newInvoice);
+  }
+
+  function handleFocusChange(obj) {
+    dispatch(obj);
   }
 
   function handleItemListChange(itemList) {
@@ -135,16 +248,35 @@ export default function EditInvoice({ invoice, onSave, history }) {
   }
 
   function handleSave(invoice) {
+    const url =
+      match.path === "/invoices/new/:id"
+        ? "/invoices/"
+        : `/invoices/${invoice.id}`;
     onSave(invoice);
-    history.replace(`/invoices/${invoice.id}`);
+    history.replace(url);
   }
 
   return (
     <Container>
-      <SubNav linkTo={`/invoices/${editedInvoice.id}`} label={"Go back"} />
+      {modalVisibility && (
+        <CreateModal
+          url={match.path}
+          invoice={editedInvoice}
+          onInvoiceSave={handleSave}
+          onModalVisibilityChange={handleModalVisibility}
+        />
+      )}
+      <SubNav
+        linkTo={
+          match.path === "/invoices/new/:id"
+            ? "/invoices/"
+            : `/invoices/${editedInvoice.id}`
+        }
+        label={"Go back"}
+      />
       <EditFormHeader>
         <Title>
-          Edit <span style={{ color: "#777F98" }}>#</span>
+          {title} <span style={{ color: "#777F98" }}>#</span>
           {editedInvoice.id}
         </Title>
       </EditFormHeader>
@@ -159,6 +291,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="senderAddress.street"
                 label={"Street Address"}
                 value={editedInvoice.senderAddress.street}
+                error={errors?.senderAddress?.street}
                 onChange={handleChange}
               />
               <FormInput
@@ -167,6 +300,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="senderAddress.city"
                 label={"City"}
                 value={editedInvoice.senderAddress.city}
+                error={errors?.senderAddress?.city}
                 onChange={handleChange}
               />
               <FormInput
@@ -175,6 +309,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="senderAddress.postCode"
                 label={"Post Code"}
                 value={editedInvoice.senderAddress.postCode}
+                error={errors?.senderAddress?.postCode}
                 onChange={handleChange}
               />
               <FormInput
@@ -183,6 +318,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="senderAddress.country"
                 label={"Country"}
                 value={editedInvoice.senderAddress.country}
+                error={errors?.senderAddress?.country}
                 onChange={handleChange}
               />
             </StyledDiv>
@@ -195,6 +331,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 type={"text"}
                 name="clientName"
                 label={"Client's Name"}
+                error={errors.clientName}
                 value={editedInvoice.clientName}
                 onChange={handleChange}
               />
@@ -204,6 +341,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="clientEmail"
                 label={"Client's Email"}
                 value={editedInvoice.clientEmail}
+                error={errors.clientEmail}
                 onChange={handleChange}
               />
               <FormInput
@@ -212,6 +350,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="clientAddress.street"
                 label={"Street Address"}
                 value={editedInvoice.clientAddress.street}
+                error={errors?.clientAddress?.street}
                 onChange={handleChange}
               />
               <FormInput
@@ -220,6 +359,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="clientAddress.city"
                 label={"City"}
                 value={editedInvoice.clientAddress.city}
+                error={errors?.clientAddress?.city}
                 onChange={handleChange}
               />
               <FormInput
@@ -228,6 +368,7 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="clientAddress.postCode"
                 label={"Post Code"}
                 value={editedInvoice.clientAddress.postCode}
+                error={errors?.clientAddress?.postCode}
                 onChange={handleChange}
               />
               <FormInput
@@ -236,15 +377,23 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="clientAddress.country"
                 label={"Country"}
                 value={editedInvoice.clientAddress.country}
+                error={errors?.clientAddress?.country}
                 onChange={handleChange}
               />
-              <DatePicker area={"invoiceDate"} />
+              <DatePicker
+                area={"invoiceDate"}
+                onDateChange={handleDateChange}
+                onFocusChange={handleFocusChange}
+                date={state}
+                value={state.date}
+              />
               <SelectInput
                 area={"payment"}
                 name="paymentTerms"
                 label={"Payment Terms"}
-                values={["Next 15 days", "Next 30 days", "Next 60 days"]}
-                onChange={handleChange}
+                values={[15, 30, 60]}
+                val={dueDate}
+                onChange={handleDateEndChange}
               />
               <FormInput
                 area={"desc"}
@@ -252,19 +401,27 @@ export default function EditInvoice({ invoice, onSave, history }) {
                 name="description"
                 label={"Project Description"}
                 value={editedInvoice.description}
+                error={errors.description}
                 onChange={handleChange}
               />
               <ItemList
                 area={"itemList"}
                 items={editedInvoice.items}
                 onItemListChange={handleItemListChange}
+                errors={errors?.items}
               />
             </StyledDiv>
           </FieldSet>
         </form>
       </FormContainer>
       <ButtonsContainer>
-        <Link to={`/invoices/${editedInvoice.id}`}>
+        <Link
+          to={
+            match.path === "/invoices/new/:id"
+              ? "/invoices/"
+              : `/invoices/${editedInvoice.id}`
+          }
+        >
           <Button bg={"#252945"} color={"#FFF"}>
             Cancel
           </Button>
@@ -273,9 +430,11 @@ export default function EditInvoice({ invoice, onSave, history }) {
           type="button"
           bg={"#7C5DFA"}
           color={"#FFF"}
-          onClick={() => handleSave(editedInvoice)}
+          onClick={handleModalVisibility}
         >
-          Save Changes
+          {match.path === "/invoices/new/:id"
+            ? "Create Invoice"
+            : `Save Changes`}
         </Button>
       </ButtonsContainer>
     </Container>

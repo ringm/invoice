@@ -42,14 +42,30 @@ const Option = styled.option`
   font-weight: 500;
 `;
 
-export default function SelectInput({ name, label, values, area, onChange }) {
+export default function SelectInput({
+  name,
+  label,
+  val,
+  values,
+  area,
+  onChange
+}) {
   return (
     <InputGroup gridArea={area}>
       <Label htmlFor={name}>{label}</Label>
-      <Select id={name} name={name}>
+      <Select
+        id={name}
+        name={name}
+        value={val}
+        onChange={(e) => onChange(e.currentTarget.value)}
+      >
         {values.map((value) => (
-          <Option key={value} value={value} onChange={() => onChange()}>
-            {value}
+          <Option
+            key={value}
+            value={value}
+            defaultValue={value === val ? true : false}
+          >
+            {`Next ${value} days`}
           </Option>
         ))}
       </Select>

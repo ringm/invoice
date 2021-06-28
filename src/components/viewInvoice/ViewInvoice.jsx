@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import SubNav from "../common/SubNav";
 import ViewInvoiceHeader from "./ViewInvoiceHeader";
 import ViewInvoiceBody from "./ViewInvoiceBody";
 import ViewInvoiceFooter from "./ViewInvoiceFooter";
+import DeleteModal from "../common/DeleteModal";
 
 const Container = styled.div`
   width: 100%;
@@ -21,20 +22,34 @@ export default function ViewInvoice({
   onInvoiceDelete,
   onStatusChange
 }) {
+  const [modalVisibility, setModalVisibility] = useState(false);
+
+  function handleModalVisibility() {
+    setModalVisibility(!modalVisibility);
+  }
+
   return (
     <Container>
+      {modalVisibility && (
+        <DeleteModal
+          id={invoice.id}
+          visibility={modalVisibility}
+          onInvoiceDelete={onInvoiceDelete}
+          onModalVisibilityChange={handleModalVisibility}
+        />
+      )}
       <SubNav linkTo={"/invoices"} label={"Go back"} />
       <ViewInvoiceHeader
         invoice={invoice}
         deviceWidth={deviceWidth}
-        onInvoiceDelete={onInvoiceDelete}
+        onModalVisibilityChange={handleModalVisibility}
         onStatusChange={onStatusChange}
       />
       <ViewInvoiceBody invoice={invoice} />
       {deviceWidth < 768 ? (
         <ViewInvoiceFooter
           invoice={invoice}
-          onInvoiceDelete={onInvoiceDelete}
+          onModalVisibilityChange={handleModalVisibility}
           onStatusChange={onStatusChange}
         />
       ) : null}

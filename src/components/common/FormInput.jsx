@@ -47,6 +47,14 @@ const Input = styled.input`
     `}
 `;
 
+const Error = styled.p`
+  color: red;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 10px;
+  line-height: 1.2;
+`;
+
 export default function FormInput({
   name,
   label,
@@ -54,7 +62,8 @@ export default function FormInput({
   area,
   type,
   onChange,
-  noBg
+  noBg,
+  error
 }) {
   return (
     <InputGroup gridArea={area}>
@@ -71,6 +80,7 @@ export default function FormInput({
         min={1}
         max={1000000}
       ></Input>
+      {error && <Error>{error}</Error>}
     </InputGroup>
   );
 }

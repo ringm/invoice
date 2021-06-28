@@ -1,3 +1,5 @@
+import { addDays, dateToDatabase } from "./helpers";
+
 export const invoiceData = [
   {
     id: "RT3080",
@@ -229,3 +231,35 @@ export const invoiceData = [
     total: 3102.04
   }
 ];
+
+export const newInvoice = {
+  id: "",
+  createdAt: dateToDatabase(new Date()),
+  paymentDue: addDays(dateToDatabase(new Date()), 15),
+  description: "",
+  paymentTerms: 0,
+  clientName: "",
+  clientEmail: "",
+  status: "pending",
+  senderAddress: {
+    street: "",
+    city: "",
+    postCode: "",
+    country: ""
+  },
+  clientAddress: {
+    street: "",
+    city: "",
+    postCode: "",
+    country: ""
+  },
+  items: [
+    {
+      name: "",
+      quantity: 1,
+      price: 1,
+      total: 1
+    }
+  ],
+  total: 1
+};

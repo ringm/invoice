@@ -31,7 +31,13 @@ const DeleteIcon = styled.svg`
   transform: translateY(10px);
 `;
 
-export default function Item({ item, onItemsChange, idx, onItemDelete }) {
+export default function Item({
+  item,
+  onItemsChange,
+  idx,
+  onItemDelete,
+  error
+}) {
   function handleItemChange(e, name) {
     const newItem = { ...item };
     newItem[name] = e.currentTarget.value;
@@ -47,6 +53,7 @@ export default function Item({ item, onItemsChange, idx, onItemDelete }) {
         label={"Item Name"}
         value={item.name}
         onChange={handleItemChange}
+        error={error?.name}
       />
       <FormInput
         area={"qty"}
@@ -55,6 +62,7 @@ export default function Item({ item, onItemsChange, idx, onItemDelete }) {
         label={"Qty."}
         value={item.quantity}
         onChange={handleItemChange}
+        error={error?.quantity}
       />
       <FormInput
         area={"price"}
@@ -63,6 +71,7 @@ export default function Item({ item, onItemsChange, idx, onItemDelete }) {
         label={"Price"}
         value={item.price}
         onChange={handleItemChange}
+        error={error?.price}
       />
       <FormInput
         area={"total"}
@@ -71,6 +80,7 @@ export default function Item({ item, onItemsChange, idx, onItemDelete }) {
         label={"Total"}
         value={item.total}
         onChange={handleItemChange}
+        error={error?.total}
         noBg
       />
       <IconContainer onClick={() => onItemDelete(idx)}>

@@ -1,3 +1,5 @@
+import Joi from "joi-browser";
+
 export function formatDate(date) {
   const months = [
     "Jan",
@@ -24,6 +26,18 @@ export function formatDate(date) {
 export function formatMoney(num) {
   var str = num.toString();
   return str.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function dateToDatabase(dateObj) {
+  return `${dateObj.getFullYear()}-${
+    dateObj.getMonth() + 1
+  }-${dateObj.getDate()}`;
+}
+
+export function addDays(date, days) {
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + days);
+  return newDate;
 }
 
 export const filterOp = [

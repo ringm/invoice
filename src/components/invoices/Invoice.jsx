@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { formatDate, formatMoney } from "../../helpers";
 import StatusPill from "../common/StatusPill";
+import Span from "../common/Span";
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.invoiceBg};
@@ -130,6 +131,7 @@ export default function Invoice({ invoice, onInvoiceSelect }) {
           to={`/invoices/${invoice.id}`}
           onClick={() => onInvoiceSelect(invoice)}
         >
+          <Span txt={"invoice details"} />
           <Arrow xmlns="http://www.w3.org/2000/svg">
             <path
               d="M1 1l4 4-4 4"

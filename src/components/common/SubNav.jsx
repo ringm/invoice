@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Span from "./Span";
 
 const Container = styled.div`
   width: min(90%, 730px);
@@ -34,6 +35,7 @@ export default function ViewInvoiceNav({ linkTo, label }) {
   return (
     <Container>
       <StyledLink to={linkTo}>
+        <Span txt={"go back"} />
         <Arrow xmlns="http://www.w3.org/2000/svg">
           <path
             d="M6.342.886L2.114 5.114l4.228 4.228"

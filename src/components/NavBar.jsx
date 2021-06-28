@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Span from "./common/Span";
 
 const Container = styled.div`
   background-color: ${(props) => props.theme.navBg};
@@ -104,6 +105,7 @@ export default function NavBar({ onThemeToggle }) {
     <Container>
       <LogoContaier>
         <Link to={"/invoices"}>
+          <Span txt={"home"} />
           <LogoSvg xmlns="http://www.w3.org/2000/svg">
             <path
               fill="#FFF"
@@ -132,7 +134,7 @@ export default function NavBar({ onThemeToggle }) {
         </div>
       </ThemeButton>
       <AvatarContainer>
-        <Avatar src={"./assets/image-avatar.jpg"} />
+        <Avatar src={"./assets/image-avatar.jpg"} alt={"profile-picture"} />
       </AvatarContainer>
     </Container>
   );

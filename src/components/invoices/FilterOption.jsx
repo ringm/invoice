@@ -23,14 +23,14 @@ const FilterCheckbox = styled.div`
     border: 1px solid #7c5dfa;
 
     ${(props) =>
-      props.id === props.active &&
+      props.dataid === props.active &&
       css`
         border: none;
       `}
   }
 
   ${(props) =>
-    props.id === props.active &&
+    props.dataid === props.active &&
     css`
       background-color: #7c5dfa;
     `}
@@ -46,7 +46,7 @@ const FilterCheckbox = styled.div`
     background-repeat: no-repeat;
 
     ${(props) =>
-      props.id === props.active &&
+      props.dataid === props.active &&
       css`
         display: block;
       `}
@@ -73,8 +73,8 @@ const FilterText = styled.p`
 export default function FilterOption({ id, active, onClick }) {
   return (
     <FilterRow>
-      <FilterCheckbox id={id} active={active} onClick={() => onClick(id)} />
-      <FilterText id={id} active={active} onClick={() => onClick(id)}>
+      <FilterCheckbox dataid={id} active={active} onClick={() => onClick(id)} />
+      <FilterText data-id={id} active={active} onClick={() => onClick(id)}>
         {id}
       </FilterText>
     </FilterRow>

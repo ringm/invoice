@@ -68,7 +68,7 @@ const ButtonContainer = styled.div`
   border-radius: 100px;
   display: flex;
   align-items: center;
-  padding: ${(props) => (props.width < 768 ? "5px" : "8px")};
+  padding: ${(props) => (props.dataWidth < 768 ? "5px" : "8px")};
   cursor: pointer;
 
   &:hover {
@@ -99,7 +99,7 @@ const New = styled.p`
   margin-right: 5px;
 
   ${(props) =>
-    props.width >= 768 &&
+    props.dataWidth >= 768 &&
     css`
       margin-left: 6px;
     `}
@@ -164,7 +164,7 @@ export default function InvoiceHeader({
         />
       </FilterContainer>
       <Link to={`/invoices/new/${newid()}`}>
-        <ButtonContainer width={deviceWidth}>
+        <ButtonContainer dataWidth={deviceWidth}>
           <AddIconContainer>
             <AddIcon>
               <path
@@ -174,7 +174,7 @@ export default function InvoiceHeader({
               />
             </AddIcon>
           </AddIconContainer>
-          <New width={deviceWidth}>
+          <New dataWidth={deviceWidth}>
             {deviceWidth < 768 ? "New" : "New Invoice"}
           </New>
         </ButtonContainer>

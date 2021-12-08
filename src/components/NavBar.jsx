@@ -134,7 +134,7 @@ export default function NavBar({ onThemeToggle }) {
         </div>
       </ThemeButton>
       <AvatarContainer>
-        <Avatar src={"./assets/image-avatar.jpg"} alt={"profile-picture"} />
+        <Avatar src={"/assets/image-avatar.jpg"} alt={"profile-picture"} />
       </AvatarContainer>
     </Container>
   );
